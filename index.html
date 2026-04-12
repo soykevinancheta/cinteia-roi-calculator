@@ -6,22 +6,54 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center h-screen">
+<body class="bg-gradient-to-br from-gray-900 to-black text-white min-h-screen flex items-center justify-center p-6">
 
-  <div class="bg-white p-8 rounded-2xl shadow-lg w-96">
-    <h1 class="text-2xl font-bold mb-4 text-center">ROI Calculator</h1>
+  <div class="w-full max-w-lg">
 
-    <label class="block mb-2">Inversión ($)</label>
-    <input id="investment" type="number" class="w-full p-2 border rounded mb-4">
+    <!-- HEADER -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold mb-2">
+        ROI Calculator
+      </h1>
+      <p class="text-gray-400">
+        Descubre si tu inversión realmente está generando ganancias 📈
+      </p>
+    </div>
 
-    <label class="block mb-2">Ganancia ($)</label>
-    <input id="profit" type="number" class="w-full p-2 border rounded mb-4">
+    <!-- CARD -->
+    <div class="bg-gray-800/80 backdrop-blur p-8 rounded-2xl shadow-2xl border border-gray-700">
 
-    <button onclick="calculateROI()" class="w-full bg-black text-white p-2 rounded hover:bg-gray-800">
-      Calcular
-    </button>
+      <!-- INPUT -->
+      <div class="mb-5">
+        <label class="block mb-2 text-sm text-gray-300">Inversión ($)</label>
+        <input id="investment" type="number"
+          class="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-white">
+      </div>
 
-    <div id="result" class="mt-4 text-center text-xl font-semibold"></div>
+      <div class="mb-6">
+        <label class="block mb-2 text-sm text-gray-300">Ganancia ($)</label>
+        <input id="profit" type="number"
+          class="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-white">
+      </div>
+
+      <!-- BOTÓN -->
+      <button onclick="calculateROI()"
+        class="w-full bg-white text-black p-3 rounded-xl font-semibold hover:bg-gray-300 transition transform hover:scale-105">
+        Calcular ROI
+      </button>
+
+      <!-- RESULTADO -->
+      <div id="result" class="mt-6 text-sm text-gray-200 leading-relaxed"></div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="text-center mt-6 text-sm text-gray-500">
+      <a href="/tools/" class="hover:text-white transition">
+        ← Volver a herramientas
+      </a>
+    </div>
+
   </div>
 
   <script>
@@ -30,13 +62,26 @@
       const profit = parseFloat(document.getElementById("profit").value);
 
       if (!investment || !profit) {
-        document.getElementById("result").innerText = "Ingresá valores válidos";
+        document.getElementById("result").innerHTML = "⚠️ Ingresa valores válidos";
         return;
       }
 
       const roi = ((profit - investment) / investment) * 100;
 
-      document.getElementById("result").innerText = "ROI: " + roi.toFixed(2) + "%";
+      let message = "";
+
+      if (roi > 50) {
+        message = "🔥 <strong>Excelente rendimiento</strong>. Tu inversión está generando grandes ganancias.";
+      } else if (roi > 0) {
+        message = "⚡ <strong>Estás ganando dinero</strong>, pero podrías optimizar tus resultados.";
+      } else {
+        message = "❌ <strong>Estás perdiendo dinero</strong>. Es momento de ajustar tu estrategia.";
+      }
+
+      message += `<br><br>📊 ROI: <strong>${roi.toFixed(2)}%</strong>`;
+      message += "<br><br><span class='text-white font-semibold'>👉 Si quieres mejorar tus resultados, contáctame en Cinteia.</span>";
+
+      document.getElementById("result").innerHTML = message;
     }
   </script>
 
