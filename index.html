@@ -1,89 +1,295 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>ROI Calculator - Cinteia</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ROI Calculator — Cinteia Tools</title>
+<meta name="description" content="Calculá el retorno de inversión de tu negocio en segundos. Resultado inmediato y gratuito.">
+
+<meta property="og:title" content="ROI Calculator | Cinteia Tools">
+<meta property="og:description" content="Calculá tu ROI y mejorá tus decisiones de negocio.">
+<meta property="og:image" content="https://cinteia.com/assets/img/webcinteia.jpg">
+<meta property="og:url" content="https://cinteia.com/tools/roi-calculator/">
+<meta property="og:type" content="website">
+
+<link rel="icon" href="/assets/img/faviconc.ico">
+<link rel="apple-touch-icon" href="/tools/assets/img/icon-192.png">
+<link rel="canonical" href="https://cinteia.com/tools/roi-calculator/">
+<link rel="manifest" href="/tools/manifest.json">
+<meta name="theme-color" content="#080808">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="../assets/css/main.css">
+
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 20px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wrapper {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  /* TOP NAV */
+  .topnav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+  }
+
+  /* HEADER */
+  .tool-header {
+    margin-bottom: 32px;
+  }
+  .tool-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 4px 12px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .tool-header h1 {
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .tool-header p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  /* ROI RESULT */
+  .roi-meter {
+    margin: 4px 0 16px;
+  }
+  .roi-bar-track {
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 100px;
+    overflow: hidden;
+    margin-top: 16px;
+  }
+  .roi-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    width: 0%;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .result-mini {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+  }
+  .result-mini-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .result-mini-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .verdict {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .verdict strong { font-weight: 600; }
+</style>
 </head>
+<body>
 
-<body class="bg-gradient-to-br from-gray-900 to-black text-white min-h-screen flex items-center justify-center p-6">
+<div class="wrapper">
 
-  <div class="w-full max-w-lg">
+  <!-- TOP NAV -->
+  <div class="topnav">
+    <a href="../" class="back-link">
+      <i class="fas fa-arrow-left" style="font-size:0.75rem;"></i> Herramientas
+    </a>
+    <a href="https://github.com/soykevinancheta/cinteia-roi-calculator" target="_blank" rel="noopener" class="btn btn-ghost btn-icon" style="width:36px;height:36px;font-size:0.9rem;" title="Ver código">
+      <i class="fab fa-github"></i>
+    </a>
+  </div>
 
-    <!-- HEADER -->
-    <div class="text-center mb-8">
-      <h1 class="text-3xl font-bold mb-2">
-        ROI Calculator
-      </h1>
-      <p class="text-gray-400">
-        Descubre si tu inversión realmente está generando ganancias 📈
-      </p>
+  <!-- HEADER -->
+  <div class="tool-header">
+    <div class="tool-badge"><i class="fas fa-chart-line"></i> Calculadora</div>
+    <h1>ROI Calculator</h1>
+    <p>Calculá si tu inversión está generando ganancias reales y qué podés mejorar.</p>
+  </div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <div class="field">
+      <label for="investment">Inversión total ($)</label>
+      <input id="investment" type="number" min="0" placeholder="Ej: 5000" inputmode="decimal">
     </div>
 
-    <!-- CARD -->
-    <div class="bg-gray-800/80 backdrop-blur p-8 rounded-2xl shadow-2xl border border-gray-700">
-
-      <!-- INPUT -->
-      <div class="mb-5">
-        <label class="block mb-2 text-sm text-gray-300">Inversión ($)</label>
-        <input id="investment" type="number"
-          class="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-white">
-      </div>
-
-      <div class="mb-6">
-        <label class="block mb-2 text-sm text-gray-300">Ganancia ($)</label>
-        <input id="profit" type="number"
-          class="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-white">
-      </div>
-
-      <!-- BOTÓN -->
-      <button onclick="calculateROI()"
-        class="w-full bg-white text-black p-3 rounded-xl font-semibold hover:bg-gray-300 transition transform hover:scale-105">
-        Calcular ROI
-      </button>
-
-      <!-- RESULTADO -->
-      <div id="result" class="mt-6 text-sm text-gray-200 leading-relaxed"></div>
-
+    <div class="field">
+      <label for="revenue">Ingresos generados ($)</label>
+      <input id="revenue" type="number" min="0" placeholder="Ej: 8000" inputmode="decimal">
     </div>
 
-    <!-- FOOTER -->
-    <div class="text-center mt-6 text-sm text-gray-500">
-      <a href="/tools/" class="hover:text-white transition">
-        ← Volver a herramientas
-      </a>
+    <div class="field" style="margin-bottom:24px;">
+      <label for="period">Período</label>
+      <select id="period">
+        <option value="mes">Este mes</option>
+        <option value="trimestre">Este trimestre</option>
+        <option value="año">Este año</option>
+        <option value="campaña">Una campaña</option>
+      </select>
+    </div>
+
+    <button class="btn btn-primary" onclick="calculateROI()" id="calc-btn">
+      Calcular ROI
+    </button>
+
+    <!-- RESULTADO -->
+    <div id="result" class="result-box">
+      <div class="roi-meter">
+        <div class="result-stat" id="roi-value">—</div>
+        <div class="roi-bar-track">
+          <div class="roi-bar-fill" id="roi-bar"></div>
+        </div>
+      </div>
+      <div class="result-grid">
+        <div class="result-mini">
+          <div class="result-mini-label">Ganancia neta</div>
+          <div class="result-mini-val" id="net-profit">—</div>
+        </div>
+        <div class="result-mini">
+          <div class="result-mini-label">Multiplicador</div>
+          <div class="result-mini-val" id="multiplier">—</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="verdict" id="verdict-text"></div>
     </div>
 
   </div>
 
-  <script>
-    function calculateROI() {
-      const investment = parseFloat(document.getElementById("investment").value);
-      const profit = parseFloat(document.getElementById("profit").value);
+  <!-- CTA -->
+  <div class="cta-strip" id="cta" style="display:none;">
+    <span>¿Querés mejorar estos números?</span>
+    <a href="https://cinteia.com" target="_blank" rel="noopener">Hablemos →</a>
+  </div>
 
-      if (!investment || !profit) {
-        document.getElementById("result").innerHTML = "⚠️ Ingresa valores válidos";
-        return;
-      }
+  <!-- FOOTER -->
+  <div style="text-align:center; margin-top:32px;">
+    <a href="https://cinteia.com/tools/" class="back-link" style="font-size:0.78rem;">
+      <i class="fas fa-th"></i> Ver todas las herramientas
+    </a>
+  </div>
 
-      const roi = ((profit - investment) / investment) * 100;
+</div><!-- /wrapper -->
 
-      let message = "";
+<script src="../assets/js/main.js"></script>
+<script>
+function calculateROI() {
+  const inv = parseFloat(document.getElementById('investment').value);
+  const rev = parseFloat(document.getElementById('revenue').value);
+  const period = document.getElementById('period').value;
 
-      if (roi > 50) {
-        message = "🔥 <strong>Excelente rendimiento</strong>. Tu inversión está generando grandes ganancias.";
-      } else if (roi > 0) {
-        message = "⚡ <strong>Estás ganando dinero</strong>, pero podrías optimizar tus resultados.";
-      } else {
-        message = "❌ <strong>Estás perdiendo dinero</strong>. Es momento de ajustar tu estrategia.";
-      }
+  const resultBox = document.getElementById('result');
+  const cta = document.getElementById('cta');
 
-      message += `<br><br>📊 ROI: <strong>${roi.toFixed(2)}%</strong>`;
-      message += "<br><br><span class='text-white font-semibold'>👉 Si quieres mejorar tus resultados, contáctame en Cinteia.</span>";
+  if (!inv || inv <= 0 || !rev || rev < 0) {
+    resultBox.className = 'result-box show warn';
+    resultBox.querySelector('.roi-meter').innerHTML = '<div style="font-size:0.9rem;color:var(--yellow);">⚠️ Ingresá valores válidos para calcular.</div>';
+    document.getElementById('result-grid') && (document.getElementById('result-grid').style.display = 'none');
+    return;
+  }
 
-      document.getElementById("result").innerHTML = message;
-    }
-  </script>
+  const roi = ((rev - inv) / inv) * 100;
+  const netProfit = rev - inv;
+  const multiplier = (rev / inv).toFixed(2);
+
+  // Formatear
+  const fmt = (n) => {
+    if (Math.abs(n) >= 1000) return '$' + (n/1000).toFixed(1) + 'k';
+    return '$' + n.toFixed(0);
+  };
+
+  document.getElementById('roi-value').textContent = roi.toFixed(1) + '%';
+  document.getElementById('net-profit').textContent = fmt(netProfit);
+  document.getElementById('multiplier').textContent = multiplier + 'x';
+
+  // Barra de progreso (cap at 200% ROI for visual)
+  const barPct = Math.max(0, Math.min(100, (roi / 200) * 100));
+  const bar = document.getElementById('roi-bar');
+
+  let barColor, cls, verdict;
+
+  if (roi >= 100) {
+    barColor = '#22c55e';
+    cls = 'result-box show good';
+    verdict = `<strong>🔥 Rendimiento excelente.</strong> Por cada $1 invertido estás recuperando <strong>$${multiplier}</strong>. Tu inversión está trabajando muy bien ${period === 'campaña' ? 'en esta campaña' : 'en ' + period}. El siguiente paso es escalar lo que está funcionando.`;
+  } else if (roi >= 20) {
+    barColor = '#22c55e';
+    cls = 'result-box show good';
+    verdict = `<strong>✅ Resultado positivo.</strong> Generás ganancia neta de <strong>${fmt(netProfit)}</strong>. Hay margen para optimizar y hacer crecer este número. Revisá qué canal tiene mejor rendimiento y doblá la apuesta ahí.`;
+  } else if (roi > 0) {
+    barColor = '#eab308';
+    cls = 'result-box show warn';
+    verdict = `<strong>⚡ Ganancia baja pero positiva.</strong> ROI del <strong>${roi.toFixed(1)}%</strong> indica que estás ganando, pero el margen es ajustado. Revisá tus costos, optimizá la conversión y buscá reducir el costo de adquisición.`;
+  } else if (roi === 0) {
+    barColor = '#eab308';
+    cls = 'result-box show warn';
+    verdict = `<strong>⚖️ Punto de equilibrio.</strong> Tu inversión se recuperó exactamente. No perdés, pero tampoco ganás. Es el momento de identificar qué pequeño cambio puede mover esto hacia positivo.`;
+  } else {
+    barColor = '#ef4444';
+    cls = 'result-box show bad';
+    verdict = `<strong>❌ Inversión en rojo.</strong> Estás perdiendo <strong>${fmt(Math.abs(netProfit))}</strong> ${period === 'campaña' ? 'en esta campaña' : 'en ' + period}. Revisá si el problema es el canal, el mensaje, el producto o el público. Parar y ajustar es mejor que seguir quemando presupuesto.`;
+  }
+
+  bar.style.background = barColor;
+  setTimeout(() => { bar.style.width = barPct + '%'; }, 50);
+
+  resultBox.className = cls;
+  document.getElementById('verdict-text').innerHTML = verdict;
+  cta.style.display = 'flex';
+}
+
+// Enter para calcular
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') calculateROI();
+});
+</script>
 
 </body>
 </html>
